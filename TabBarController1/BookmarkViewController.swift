@@ -20,8 +20,8 @@ class BookmarkViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var tableview: UITableView!
     
-    let cars = ["RangeRover","BMW","Lamborgini","Tesla","cadilack",]
-    let fruits = ["Apple","graps","pomagranate","watermelon","cherry","strawberry",]
+    var cars = ["RangeRover","BMW","Lamborgini","Tesla","cadilack",]
+    var fruits = ["Apple","graps","pomagranate","watermelon","cherry","strawberry",]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,10 +37,20 @@ class BookmarkViewController: UIViewController {
     }
     
     @IBAction func plusbtn(_ sender: UIButton) {
-        ShowAleart()
+        
+        switch segmentedControl.selectedSegmentIndex{
+        case 0:
+            addBookmarkAleart()
+        case 1:
+            addFavoritAleart()
+            
+        default:
+            break
+        }
+       
     }
     
-    func ShowAleart(){
+    func addBookmarkAleart(){
      
         let alertController = UIAlertController(title: "Create Folder", message: nil, preferredStyle: .alert)
 
@@ -54,12 +64,44 @@ class BookmarkViewController: UIViewController {
             if let textField = alertController.textFields?.first {
                 let enteredText = textField.text ?? ""
                 print("Entered text: \(enteredText)")
-                self.bookmark.append(enteredText)
-                self.bookmark2.append(enteredText)
+                self.cars.append(enteredText)
+                self.fruits.append(enteredText)
                 
                 self.tableview.reloadData()
-                print(self.bookmark)
-                print(self.bookmark2)
+                print(self.cars)
+                print(self.fruits)
+            }
+        }
+
+        alertController.addAction(createAction)
+
+    
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true, completion: nil)
+
+}
+    func addFavoritAleart(){
+     
+        let alertController = UIAlertController(title: "Create Fevorit", message: nil, preferredStyle: .alert)
+
+        
+        alertController.addTextField { textField in
+            textField.placeholder = "Folder name"
+        }
+
+      
+        let createAction = UIAlertAction(title: "Create", style: .default) { action in
+            if let textField = alertController.textFields?.first {
+                let enteredText = textField.text ?? ""
+                print("Entered text: \(enteredText)")
+                self.cars.append(enteredText)
+                self.fruits.append(enteredText)
+                
+                self.tableview.reloadData()
+                print(self.cars)
+                print(self.fruits)
             }
         }
 
@@ -73,6 +115,7 @@ class BookmarkViewController: UIViewController {
 
 }
     
+
     
     
     
@@ -83,9 +126,9 @@ extension  BookmarkViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch segmentedControl.selectedSegmentIndex{
         case 0:
-            return bookmark.count
+            return cars.count
         case 1:
-            return bookmark2.count
+            return fruits.count
             
         default:
             break
@@ -97,9 +140,9 @@ extension  BookmarkViewController: UITableViewDelegate,UITableViewDataSource{
         let cell = tableview.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         switch segmentedControl.selectedSegmentIndex{
         case 0:
-            cell.textLabel?.text = bookmark[indexPath.row]
+            cell.textLabel?.text = cars[indexPath.row]
        case 1:
-            cell.textLabel?.text = bookmark2[indexPath.row]
+            cell.textLabel?.text = fruits[indexPath.row]
         default:
             break
         }
